@@ -53,4 +53,4 @@ See NLTK documentation for details.
 * Filipp Solovev - Deep code refactoring - [FilippSolovev](https://github.com/FilippSolovev "FilippSolovev")
 
 # License
-This project is licensed under the MIT License - see the [LICENSE.md](NameStat/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/FilippSolovev/NameStat/blob/master/LICENSE) file for details
