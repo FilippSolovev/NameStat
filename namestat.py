@@ -1,6 +1,7 @@
 import ast
 import os
 import functools
+import sys
 from collections import Counter
 
 from nltk import pos_tag
@@ -112,21 +113,13 @@ def find_frequent_verbs_within_path(path, head=10):
 
 def main():
 
-    PATH = '.'
     TOP_SIZE = 10
-    verbs = []
-    projects = [
-        'django',
-        'flask',
-        'pyramid',
-        'reddit',
-        'requests',
-        'sqlalchemy',
-    ]
+    try:
+        path = sys.argv[1]
+    except IndexError as error:
+        path = '.'
 
-    for project in projects:
-        path = os.path.join(PATH, project)
-        verbs += find_frequent_verbs_within_path(path, head=TOP_SIZE)
+    verbs = find_frequent_verbs_within_path(path, head=TOP_SIZE)
 
     print('total %s words, %s unique' % (len(verbs), len(set(verbs))))
 
