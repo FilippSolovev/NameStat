@@ -45,8 +45,6 @@ def fetch_list_of_fnames(path):
         for fname in files:
             if fname.endswith('.py'):
                 list_of_fnames.append(os.path.join(dirname, fname))
-                if len(list_of_fnames) == 100:
-                    break
     return list_of_fnames
 
 
