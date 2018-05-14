@@ -1,25 +1,13 @@
 import ast
 import os
-import functools
 import sys
 from collections import Counter
+from find_verbs import extract_verbs_from_funcname
 
-from nltk import pos_tag
+import logging
 
-
-def inform_status(func):
-    @functools.wraps(func)
-    def wrapped(*args, **kwargs):
-        output = func(*args, **kwargs)
-        func_name = parse_snake_case(func.__name__)
-        if func_name[3] == 'fnames':
-            print('total %s files' % len(output))
-        if func_name[3] == 'trees':
-            print('trees generated')
-        if func_name[3] == 'func':
-            print('total %s functions' % len(output))
-        return output
-    return wrapped
+logger = logging.getLogger()
+logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 
 def flatter_a_list(list_of_lists):
@@ -30,14 +18,6 @@ def flatter_a_list(list_of_lists):
     return output
 
 
-def is_verb(word):
-    if not word:
-        return False
-    pos_info = pos_tag([word])
-    return pos_info[0][1] == 'VB'
-
-
-@inform_status
 def fetch_list_of_fnames(path):
     list_of_fnames = []
 
@@ -45,10 +25,10 @@ def fetch_list_of_fnames(path):
         for fname in files:
             if fname.endswith('.py'):
                 list_of_fnames.append(os.path.join(dirname, fname))
+    logger.info(f'total {len(list_of_fnames)} files')
     return list_of_fnames
 
 
-@inform_status
 def fetch_list_of_trees(path):
     list_of_fnames = fetch_list_of_fnames(path)
 
@@ -63,11 +43,10 @@ def fetch_list_of_trees(path):
             print(error)
             continue
         list_of_trees.append(tree)
-
+    logger.info('trees generated')
     return list_of_trees
 
 
-@inform_status
 def fetch_list_of_func(path):
     list_of_trees = fetch_list_of_trees(path)
 
@@ -83,17 +62,8 @@ def fetch_list_of_func(path):
     for function in list_of_func:
         if not (function.startswith('__') and function.endswith('__')):
             output.append(function)
-
+    logger.info(f'total {len(output)} functions')
     return output
-
-
-def parse_snake_case(sc_name):
-    return [word for word in sc_name.split('_') if word]
-
-
-def extract_verbs_from_funcname(function_name):
-    words = parse_snake_case(function_name)
-    return [word for word in words if is_verb(word)]
 
 
 def find_frequent_verbs_within_path(path, head=10):
@@ -109,13 +79,16 @@ def find_frequent_verbs_within_path(path, head=10):
     return Counter(verbs).most_common(head)
 
 
-def main():
+if __name__ == '__main__':
 
     TOP_SIZE = 10
-    try:
+    if len(sys.argv) > 1:
         path = sys.argv[1]
-    except IndexError as error:
+    else:
         path = '.'
+    if not os.path.exists(path):
+        logger.error('Path given does not exist.')
+        sys.exit()
 
     verbs = find_frequent_verbs_within_path(path, head=TOP_SIZE)
 
@@ -123,7 +96,3 @@ def main():
 
     for verb, occurence in verbs:
         print(verb, occurence)
-
-
-if __name__ == '__main__':
-    main()
