@@ -46,7 +46,9 @@ Since the project uses NLTK it needs ‘averaged_perceptron_tagger’, to obtain
 See NLTK documentation for details.
 
 # Built With
-* [NLTK](https://www.nltk.org "NLTK") - Used to parse function names 
+* [NLTK](https://www.nltk.org "NLTK") - Used to parse function names
+
+Bird, Steven, Edward Loper and Ewan Klein (2009), Natural Language Processing with Python. O’Reilly Media Inc.
 
 # Authors
 * Ilya Lebedev - Initial work - [Melevir](https://github.com/Melevir "Melevir")
