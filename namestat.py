@@ -10,7 +10,7 @@ logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 
-def flatter_a_list(list_of_lists):
+def flatter_list(list_of_lists):
     output = []
     for sublist in list_of_lists:
         for item in sublist:
@@ -74,7 +74,7 @@ def find_frequent_verbs_within_path(path, head=10):
     for function in list_of_func:
         verbs.append(extract_verbs_from_funcname(function))
 
-    verbs = flatter_a_list(verbs)
+    verbs = flatter_list(verbs)
 
     return Counter(verbs).most_common(head)
 
